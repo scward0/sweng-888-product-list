@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">ProductList</string>
+    <string name="available_products">Available Products</string>
+    <string name="selected_products">Selected Products</string>
+    <string name="next_button">Next</string>
+    <string name="send_email_button">Send Products via Email</string>
+    <string name="select_at_least_three">Please select at least 3 products</string>
+    <string name="email_sent_success">Email sent successfully! Products list cleared.</string>
+    <string name="no_email_app">No email app found</string>
+    <string name="no_products_to_send">No products to send</string>
+    <string name="email_subject">Selected Products Information</string>
+</resources>
