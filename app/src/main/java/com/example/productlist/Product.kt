@@ -1,6 +1,4 @@
 package com.example.productlist
-
-// Product.kt
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 

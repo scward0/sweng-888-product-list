@@ -1,6 +1,4 @@
 package com.example.productlist
-
-// SecondActivity.kt
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -69,7 +67,7 @@ class SecondActivity : AppCompatActivity() {
         val emailContent = buildEmailContent()
 
         val emailIntent = Intent(Intent.ACTION_SEND).apply {
-            type = "text/plain"  // Changed back to plain text
+            type = "text/plain"
             putExtra(Intent.EXTRA_EMAIL, arrayOf("scward0@gmail.com"))
             putExtra(Intent.EXTRA_SUBJECT, "Selected Products Information | Sean Ward | svw5927@psu.edu | Practice III")
             putExtra(Intent.EXTRA_TEXT, emailContent)
@@ -85,7 +83,7 @@ class SecondActivity : AppCompatActivity() {
 
     private fun isEmailClientAvailable(): Boolean {
         val emailIntent = Intent(Intent.ACTION_SEND).apply {
-            type = "text/plain"  // Changed back to plain text
+            type = "text/plain"
         }
         return emailIntent.resolveActivity(packageManager) != null
     }
