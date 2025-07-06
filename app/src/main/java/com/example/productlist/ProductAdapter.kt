@@ -67,6 +67,7 @@ class ProductAdapter(
         }
     }
 
+    // get number of products
     override fun getItemCount() = products.size
 
     fun getSelectedProducts(): Set<Product> = selectedProducts.toSet()

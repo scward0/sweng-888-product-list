@@ -45,5 +45,6 @@ class SelectedProductAdapter(
         }
     }
 
+    // get number of selected products
     override fun getItemCount() = products.size
 }

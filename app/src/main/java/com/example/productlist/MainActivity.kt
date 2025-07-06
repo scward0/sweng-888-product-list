@@ -17,14 +17,18 @@ class MainActivity : AppCompatActivity() {
     private lateinit var categoryContainer: LinearLayout
     private lateinit var productAdapter: ProductAdapter
     private lateinit var databaseHelper: DatabaseHelper
+
+    // state variabbles
     private var selectedProducts = setOf<Product>()
     private var currentCategory = "All" // Track current filter
     private var allProducts = listOf<Product>()
 
+    // on create
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // helper methods for init
         initializeViews()
         setupDatabase()
         setupCategoryFilter()
@@ -32,20 +36,25 @@ class MainActivity : AppCompatActivity() {
         setupNextButton()
     }
 
+    // find UI components
     private fun initializeViews() {
         recyclerView = findViewById(R.id.recyclerViewProducts)
         nextButton = findViewById(R.id.buttonNext)
         categoryContainer = findViewById(R.id.categoryContainer)
     }
 
+    // init db and load all products
     private fun setupDatabase() {
         databaseHelper = DatabaseHelper(this)
         allProducts = databaseHelper.getAllProducts()
     }
 
+    // create category filter
     private fun setupCategoryFilter() {
         val categories = listOf("All") + databaseHelper.getAllCategories()
 
+
+        // create buttons for category filter
         categories.forEach { category ->
             val categoryButton = TextView(this).apply {
                 text = category
@@ -77,6 +86,7 @@ class MainActivity : AppCompatActivity() {
         updateCategoryButtons("All")
     }
 
+    // update category buttons, handles visual state
     private fun updateCategoryButtons(selectedCategory: String) {
         currentCategory = selectedCategory
         for (i in 0 until categoryContainer.childCount) {
@@ -91,6 +101,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // apply the filter
     private fun filterByCategory(category: String) {
         val filteredProducts = if (category == "All") {
             allProducts
@@ -104,10 +115,12 @@ class MainActivity : AppCompatActivity() {
         updateNextButton()
     }
 
+    // init recycler view
     private fun setupRecyclerView() {
         updateRecyclerView(allProducts)
     }
 
+    // update recycler with new product list
     private fun updateRecyclerView(products: List<Product>) {
         productAdapter = ProductAdapter(products) { selected ->
             selectedProducts = selected
@@ -120,6 +133,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // set up button for second activity
     private fun setupNextButton() {
         nextButton.setOnClickListener {
             if (selectedProducts.size >= 3) {

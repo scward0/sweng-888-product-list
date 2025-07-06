@@ -7,11 +7,13 @@ import android.database.sqlite.SQLiteOpenHelper
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
+
+        // establish database constants
         private const val DATABASE_NAME = "products.db"
         private const val DATABASE_VERSION = 1
         private const val TABLE_PRODUCTS = "products"
 
-        // Column names
+        // create column names
         private const val COLUMN_ID = "id"
         private const val COLUMN_NAME = "name"
         private const val COLUMN_DESCRIPTION = "description"
@@ -21,7 +23,10 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         private const val COLUMN_CATEGORY = "category"
     }
 
+
+    // call database on create
     override fun onCreate(db: SQLiteDatabase) {
+        // create table
         val createTable = """
             CREATE TABLE $TABLE_PRODUCTS (
                 $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -40,11 +45,13 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         insertSampleData(db)
     }
 
+    // if db version updates, create new db
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.execSQL("DROP TABLE IF EXISTS $TABLE_PRODUCTS")
         onCreate(db)
     }
 
+    // create my sample products
     private fun insertSampleData(db: SQLiteDatabase) {
         val sampleProducts = listOf(
             Product(0, "iPhone 14", "Latest Apple smartphone with advanced camera", "Apple Store", 999.99, "ic_phone", "Electronics"),
@@ -61,16 +68,19 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             Product(0, "Gaming Laptop", "High-performance gaming laptop with RTX graphics", "ASUS", 1599.99, "ic_laptop", "Computers")
         )
 
+        // insert sample products into db
         sampleProducts.forEach { product ->
             insertProduct(db, product)
         }
     }
 
+    // public insert
     fun insertProduct(product: Product): Long {
         val db = writableDatabase
         return insertProduct(db, product)
     }
 
+    // private insert, actually does insertion
     private fun insertProduct(db: SQLiteDatabase, product: Product): Long {
         val values = ContentValues().apply {
             put(COLUMN_NAME, product.name)
@@ -83,13 +93,16 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return db.insert(TABLE_PRODUCTS, null, values)
     }
 
+    // get all prodducts from the db
     fun getAllProducts(): List<Product> {
         val products = mutableListOf<Product>()
         val db = readableDatabase
         val cursor = db.query(TABLE_PRODUCTS, null, null, null, null, null, null)
 
+        // iterates through rows
         with(cursor) {
             while (moveToNext()) {
+                // get data
                 val id = getInt(getColumnIndexOrThrow(COLUMN_ID))
                 val name = getString(getColumnIndexOrThrow(COLUMN_NAME))
                 val description = getString(getColumnIndexOrThrow(COLUMN_DESCRIPTION))
@@ -98,6 +111,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 val pictureUri = getString(getColumnIndexOrThrow(COLUMN_PICTURE_URI))
                 val category = getString(getColumnIndexOrThrow(COLUMN_CATEGORY))
 
+                // create product object add add
                 products.add(Product(id, name, description, seller, price, pictureUri, category))
             }
         }
@@ -105,6 +119,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return products
     }
 
+    // query product by category
     fun getByCategory(category: String): List<Product> {
         val products = mutableListOf<Product>()
         val db = readableDatabase
@@ -129,6 +144,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         return products
     }
 
+    // return all of the category types, used for filtering
     fun getAllCategories(): List<String> {
         val categories = mutableSetOf<String>()
         val db = readableDatabase
